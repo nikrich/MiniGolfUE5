@@ -18,6 +18,8 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+		
+	void Shoot();
 
 public:	
 	// Called every frame
@@ -26,4 +28,26 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+private:
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowPrivateAccess = "true"))
+		UStaticMeshComponent* BaseMesh;
+
+	UPROPERTY(EditAnywhere, Category = "Movement", meta = (AllowPrivateAccess = "true"))
+		float SpeedMultiplier = 200.f;
+
+	UPROPERTY(EditAnywhere, Category = "Movement", meta = (AllowPrivateAccess = "true"))
+		float MaxForce = 1300.f;
+
+	APlayerController* PlayerController;
+
+	FVector GetForwardVector() const;
+
+	UFUNCTION(Blueprintcallable)
+	FVector GetForwardForce() const;
+
+	float GetDistance() const;
+	FVector GetMouseCollision() const;
+
+public:
+	APlayerController* GetPlayerController();
 };
