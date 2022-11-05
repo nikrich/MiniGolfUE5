@@ -28,7 +28,7 @@ void ABasePawn::BeginPlay()
 
 void ABasePawn::Shoot()
 {	
-	BaseMesh->AddForce(GetForwardForce(), TEXT("None"), false);
+	BaseMesh->AddForce(GetForwardVector() * SpeedMultiplier * GetForwardForce(), TEXT("None"), false);
 }
 
 // Called every frame
@@ -40,7 +40,7 @@ void ABasePawn::Tick(float DeltaTime)
 
 	auto Force = FMath::Clamp(GetDistance(), 0.f, MaxForce);
 
-	DrawDebugLine(GetWorld(), GetActorLocation(), (GetForwardVector() + GetActorLocation()) * Force, FColor::Red, false);
+	DrawDebugLine(GetWorld(), GetActorLocation(), GetMouseCollision(), FColor::Red, false);
 }
 
 // Called to bind functionality to input
@@ -61,10 +61,9 @@ FVector ABasePawn::GetForwardVector() const
 	return DisplacementVector;
 }
 
-FVector ABasePawn::GetForwardForce() const
+float ABasePawn::GetForwardForce() const
 {
-	float Force = FMath::Clamp(GetDistance(), 0.f, MaxForce);
-	return GetForwardVector() * SpeedMultiplier * Force;
+	return FMath::Clamp(GetDistance(), 0.f, MaxForce);
 }
 
 float ABasePawn::GetDistance() const

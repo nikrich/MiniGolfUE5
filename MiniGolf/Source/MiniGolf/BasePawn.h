@@ -43,7 +43,7 @@ private:
 	FVector GetForwardVector() const;
 
 	UFUNCTION(Blueprintcallable)
-	FVector GetForwardForce() const;
+	float GetForwardForce() const;
 
 	float GetDistance() const;
 	FVector GetMouseCollision() const;
