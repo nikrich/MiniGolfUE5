@@ -40,6 +40,9 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Movement")
 		TSubclassOf<class UCameraShakeBase> ShotCameraShake;
+
+	UPROPERTY(EditAnywhere, Category = "Movement")
+		USoundBase* HitSound;
 	
 	AActor* GolfHole;
 	APlayerController* PlayerController;

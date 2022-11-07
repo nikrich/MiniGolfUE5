@@ -37,7 +37,16 @@ void ABasePawn::Shoot()
 		return;
 
 	IsBallInMotion = true;
-	BaseMesh->AddImpulse(GetForwardVector() * SpeedMultiplier * GetForwardForce(), TEXT("None"), false);	
+	BaseMesh->AddImpulse(GetForwardVector() * SpeedMultiplier * GetForwardForce(), TEXT("None"), false);
+
+	if (ShotCameraShake) {
+		UE_LOG(LogTemp, Warning, TEXT("Camera is shaking"));
+		GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(ShotCameraShake);
+	}
+
+	if (HitSound) {
+		UGameplayStatics::PlaySoundAtLocation(this, HitSound, GetActorLocation());
+	}
 }
 
 // Called every frame
