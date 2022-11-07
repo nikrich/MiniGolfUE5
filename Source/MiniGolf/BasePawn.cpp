@@ -3,8 +3,10 @@
 
 #include "BasePawn.h"
 #include "Projectile.h"
+#include "GolfHole.h"
 #include "DrawDebugHelpers.h"
 #include "GameFramework/PlayerController.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ABasePawn::ABasePawn()
@@ -24,11 +26,18 @@ void ABasePawn::BeginPlay()
 	Super::BeginPlay();
 
 	PlayerController = Cast<APlayerController>(GetController());
+	GolfHole = UGameplayStatics::GetActorOfClass(this, AGolfHole::StaticClass());
 }
 
 void ABasePawn::Shoot()
-{	
-	BaseMesh->AddImpulse(GetForwardVector() * SpeedMultiplier * GetForwardForce(), TEXT("None"), false);
+{
+	UE_LOG(LogTemp, Warning, TEXT("Is moving %s"), IsBallInMotion ? "true" : "false");
+
+	if (IsBallInMotion)
+		return;
+
+	IsBallInMotion = true;
+	BaseMesh->AddImpulse(GetForwardVector() * SpeedMultiplier * GetForwardForce(), TEXT("None"), false);	
 }
 
 // Called every frame
@@ -36,11 +45,13 @@ void ABasePawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	DrawDebugSphere(GetWorld(), GetMouseCollision(), 25.f, 20.f, FColor::Red, false);
+	DrawDebugSphere(GetWorld(), GetMouseCollision(), 5.f, 20.f, FColor::Red, false);
 
 	auto Force = FMath::Clamp(GetDistance(), 0.f, MaxForce);
 
 	DrawDebugLine(GetWorld(), GetActorLocation(), GetMouseCollision(), FColor::Red, false);
+
+	StopTurnIfBallStops();
 }
 
 // Called to bind functionality to input
@@ -59,6 +70,21 @@ FVector ABasePawn::GetForwardVector() const
 
 	UE_LOG(LogTemp, Warning, TEXT("Impact Result X: %f, Y: %f, Z: %f"), DisplacementVector.X, DisplacementVector.Y, DisplacementVector.Z);
 	return DisplacementVector;
+}
+
+void ABasePawn::StopTurnIfBallStops()
+{
+	if (BaseMesh->GetComponentVelocity() == FVector::ZeroVector && IsBallInMotion) {
+		IsBallInMotion = false;
+		UE_LOG(LogTemp, Warning, TEXT("Turn ended"));
+
+		if (GolfHole) {
+			auto Dist = FVector::DistSquaredXY(BaseMesh->GetComponentLocation(), GolfHole->GetActorLocation());
+			UE_LOG(LogTemp, Warning, TEXT("Ball - X: %f, Y: %f, Z: %f"), BaseMesh->GetComponentLocation().X, BaseMesh->GetComponentLocation().Y, BaseMesh->GetComponentLocation().Z);
+			UE_LOG(LogTemp, Warning, TEXT("Hole - X: %f, Y: %f, Z: %f"), GolfHole->GetActorLocation().X, GolfHole->GetActorLocation().Y, GolfHole->GetActorLocation().Z);
+			UE_LOG(LogTemp, Warning, TEXT("Distance from hole: %f"), (float) Dist);
+		}
+	}
 }
 
 float ABasePawn::GetForwardForce() const

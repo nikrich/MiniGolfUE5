@@ -38,15 +38,19 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Movement", meta = (AllowPrivateAccess = "true"))
 		float MaxForce = 1300.f;
 
+	UPROPERTY(EditAnywhere, Category = "Movement")
+		TSubclassOf<class UCameraShakeBase> ShotCameraShake;
+	
+	AActor* GolfHole;
 	APlayerController* PlayerController;
-
+	bool IsBallInMotion;
 	FVector GetForwardVector() const;
+	void StopTurnIfBallStops();
+	float GetDistance() const;
+	FVector GetMouseCollision() const;
 
 	UFUNCTION(Blueprintcallable)
 	float GetForwardForce() const;
-
-	float GetDistance() const;
-	FVector GetMouseCollision() const;
 
 public:
 	APlayerController* GetPlayerController();

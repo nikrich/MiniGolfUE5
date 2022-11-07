@@ -11,6 +11,4 @@ void AGolfPlayerController::SetPlayerEnabledState(bool bPlayerEnabled)
 	else {
 		GetPawn()->DisableInput(this);
 	}
-
-	bShowMouseCursor = bPlayerEnabled;
 }
