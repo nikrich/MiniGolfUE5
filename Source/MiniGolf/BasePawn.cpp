@@ -28,7 +28,7 @@ void ABasePawn::BeginPlay()
 
 void ABasePawn::Shoot()
 {	
-	BaseMesh->AddForce(GetForwardVector() * SpeedMultiplier * GetForwardForce(), TEXT("None"), false);
+	BaseMesh->AddImpulse(GetForwardVector() * SpeedMultiplier * GetForwardForce(), TEXT("None"), false);
 }
 
 // Called every frame
