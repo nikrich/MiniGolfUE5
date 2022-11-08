@@ -11,4 +11,22 @@ void AGolfPlayerController::SetPlayerEnabledState(bool bPlayerEnabled)
 	else {
 		GetPawn()->DisableInput(this);
 	}
+
+	IsPlayerEnabled = bPlayerEnabled;
+}
+
+bool AGolfPlayerController::GetPlayerEnabledState()
+{
+	return IsPlayerEnabled;
+}
+
+void AGolfPlayerController::Shoot()
+{
+	SetPlayerEnabledState(false);
+	ShotsTaken++;
+}
+
+int32 AGolfPlayerController::GetShotsTaken()
+{
+	return ShotsTaken;
 }

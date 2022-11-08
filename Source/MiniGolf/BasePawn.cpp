@@ -5,8 +5,8 @@
 #include "Projectile.h"
 #include "GolfHole.h"
 #include "DrawDebugHelpers.h"
-#include "GameFramework/PlayerController.h"
 #include "Kismet/GameplayStatics.h"
+#include "GolfPlayerController.h"
 
 // Sets default values
 ABasePawn::ABasePawn()
@@ -25,23 +25,24 @@ void ABasePawn::BeginPlay()
 {
 	Super::BeginPlay();
 
-	PlayerController = Cast<APlayerController>(GetController());
+	PlayerController = Cast<AGolfPlayerController>(GetController());
 	GolfHole = UGameplayStatics::GetActorOfClass(this, AGolfHole::StaticClass());
 }
 
 void ABasePawn::Shoot()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Is moving %s"), IsBallInMotion ? "true" : "false");
+	if (!PlayerController) return;
 
-	if (IsBallInMotion)
+
+	if (!PlayerController->GetPlayerEnabledState())
 		return;
 
-	IsBallInMotion = true;
+	PlayerController->Shoot();
+
 	BaseMesh->AddImpulse(GetForwardVector() * SpeedMultiplier * GetForwardForce(), TEXT("None"), false);
 
-	if (ShotCameraShake) {
-		UE_LOG(LogTemp, Warning, TEXT("Camera is shaking"));
-		GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(ShotCameraShake);
+	if (ShotCameraShake && PlayerController) {
+		PlayerController->ClientStartCameraShake(ShotCameraShake);
 	}
 
 	if (HitSound) {
@@ -77,14 +78,14 @@ FVector ABasePawn::GetForwardVector() const
 	FVector DisplacementVector = (GetMouseCollision() - GetActorLocation()) / GetDistance();
 	DisplacementVector.Z = 0; // Do not allow ball to go into the air
 
-	UE_LOG(LogTemp, Warning, TEXT("Impact Result X: %f, Y: %f, Z: %f"), DisplacementVector.X, DisplacementVector.Y, DisplacementVector.Z);
 	return DisplacementVector;
 }
 
 void ABasePawn::StopTurnIfBallStops()
 {
-	if (BaseMesh->GetComponentVelocity() == FVector::ZeroVector && IsBallInMotion) {
-		IsBallInMotion = false;
+	if (BaseMesh->GetComponentVelocity() == FVector::ZeroVector && PlayerController && !PlayerController->GetPlayerEnabledState()) {
+		PlayerController->SetPlayerEnabledState(true);
+
 		UE_LOG(LogTemp, Warning, TEXT("Turn ended"));
 
 		if (GolfHole) {

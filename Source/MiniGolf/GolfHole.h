@@ -17,10 +17,7 @@ public:
 
 protected:
 	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-	UFUNCTION(BlueprintImplementableEvent)
-		void HoleFinished();
+	virtual void BeginPlay() override;	
 
 public:	
 	// Called every frame
@@ -30,7 +27,12 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowPrivateAccess = "true"))
 		class UBoxComponent* BaseCollider;
 
-private:
+	class AGolfGameMode* GolfGameMode;
+	bool IsActive = true;
+	class AGolfPlayerController* PlayerController;
+
+	void EndRound(class ABasePawn* GolfBall);
+
 	UFUNCTION()
 		void OnGolfBallEnter(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 

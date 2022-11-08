@@ -45,12 +45,12 @@ private:
 		USoundBase* HitSound;
 	
 	AActor* GolfHole;
-	APlayerController* PlayerController;
-	bool IsBallInMotion;
+	class AGolfPlayerController* PlayerController;
+	
 	FVector GetForwardVector() const;
 	void StopTurnIfBallStops();
 	float GetDistance() const;
-	FVector GetMouseCollision() const;
+	FVector GetMouseCollision() const;	
 
 	UFUNCTION(Blueprintcallable)
 	float GetForwardForce() const;

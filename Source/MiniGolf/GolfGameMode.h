@@ -15,10 +15,14 @@ class MINIGOLF_API AGolfGameMode : public AGameModeBase
 	GENERATED_BODY()	
 
 protected:
-	virtual void BeginPlay();
+	virtual void BeginPlay();	
 
 private:
 	class AGolfPlayerController* GolfPlayerController;
 	void HandleGameStart();
+
+public:
+	UFUNCTION(BlueprintImplementableEvent)
+		void RoundComplete(int32 ShotsTaken);
 
 };

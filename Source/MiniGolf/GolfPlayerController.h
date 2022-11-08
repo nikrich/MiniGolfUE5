@@ -13,7 +13,14 @@ UCLASS()
 class MINIGOLF_API AGolfPlayerController : public APlayerController
 {
 	GENERATED_BODY()
+		
+private:
+	bool IsPlayerEnabled;
+	int32 ShotsTaken = 0;
 	
 public:
 	void SetPlayerEnabledState(bool bPlayerEnabled);
+	bool GetPlayerEnabledState();
+	void Shoot();
+	int32 GetShotsTaken();
 };
