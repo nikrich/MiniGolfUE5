@@ -33,7 +33,6 @@ void ABasePawn::Shoot()
 {
 	if (!PlayerController) return;
 
-
 	if (!PlayerController->GetPlayerEnabledState())
 		return;
 
