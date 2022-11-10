@@ -16,8 +16,6 @@ ABasePawn::ABasePawn()
 
 	BaseMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Base Mesh"));
 	RootComponent = BaseMesh;
-
-
 }
 
 // Called when the game starts or when spawned
