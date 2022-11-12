@@ -63,11 +63,11 @@ void ABasePawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	DrawDebugSphere(GetWorld(), GetMouseCollision(), 5.f, 20.f, FColor::Red, false);
+	//DrawDebugSphere(GetWorld(), GetMouseCollision(), 5.f, 20.f, FColor::Red, false);
 
 	auto Force = FMath::Clamp(GetDistance(), 0.f, MaxForce);
 
-	DrawDebugLine(GetWorld(), GetActorLocation(), GetMouseCollision(), FColor::Red, false);
+	//DrawDebugLine(GetWorld(), GetActorLocation(), GetMouseCollision(), FColor::Red, false);
 
 	StopTurnIfBallStops();
 
@@ -84,6 +84,10 @@ void ABasePawn::Tick(float DeltaTime)
 	FRotator LookAtRotation = FRotator(0.f, 180 + GetForwardVector().Rotation().Yaw, 0.f);
 	ArrowLengthSpringArm->SetWorldRotation(FMath::RInterpTo(ArrowLengthSpringArm->GetComponentRotation(), LookAtRotation, UGameplayStatics::GetWorldDeltaSeconds(this), 20.f));
 	ArrowLengthSpringArm->TargetArmLength = GetForwardForce();
+
+	FVector BodyScale = ArrowBodyMesh->GetRelativeScale3D();
+	BodyScale.X = GetForwardForce() / 100;
+	ArrowBodyMesh->SetRelativeScale3D(BodyScale);
 }
 
 // Called to bind functionality to input
