@@ -55,6 +55,8 @@ private:
 	
 	AActor* GolfHole;
 	class AGolfPlayerController* PlayerController;
+	class UMaterialInstanceDynamic* ArrowMaterial;
+
 	
 	FVector GetForwardVector() const;
 	void StopTurnIfBallStops();

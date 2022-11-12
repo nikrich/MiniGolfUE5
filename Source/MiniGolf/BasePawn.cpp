@@ -8,7 +8,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "GolfPlayerController.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "DirectionHelper.h"
+#include "Materials/MaterialInstanceDynamic.h"
+#include "Materials/MaterialInterface.h"
 
 // Sets default values
 ABasePawn::ABasePawn()
@@ -36,6 +37,12 @@ void ABasePawn::BeginPlay()
 
 	PlayerController = Cast<AGolfPlayerController>(GetController());
 	GolfHole = UGameplayStatics::GetActorOfClass(this, AGolfHole::StaticClass());
+
+	// Set Arrow Materials
+	UMaterialInterface* Material = ArrowBodyMesh->GetMaterial(0);
+	ArrowMaterial = UMaterialInstanceDynamic::Create(Material, NULL);
+	ArrowBodyMesh->SetMaterial(0, ArrowMaterial);
+	ArrowHeadMesh->SetMaterial(0, ArrowMaterial);
 }
 
 void ABasePawn::Shoot()
@@ -134,14 +141,19 @@ void ABasePawn::UpdateArrow()
 		ArrowLengthSpringArm->SetVisibility(true, true);
 	}
 
-	float Angle = DirectionHelper::GetQuadrantAngle(GetForwardVector());
 	FRotator LookAtRotation = FRotator(0.f, 180 + GetForwardVector().Rotation().Yaw, 0.f);
 	ArrowLengthSpringArm->SetWorldRotation(FMath::RInterpTo(ArrowLengthSpringArm->GetComponentRotation(), LookAtRotation, UGameplayStatics::GetWorldDeltaSeconds(this), 20.f));
 	ArrowLengthSpringArm->TargetArmLength = GetForwardForce();
 
+	// Adjust Size
 	FVector BodyScale = ArrowBodyMesh->GetRelativeScale3D();
 	BodyScale.X = GetForwardForce() / 100;
 	ArrowBodyMesh->SetRelativeScale3D(BodyScale);
+
+	// TODO: Adjust Color
+	UE_LOG(LogTemp, Warning, TEXT("Strength: %f"), GetForwardForce() / MaxForce);
+	ArrowMaterial->SetScalarParameterValue(TEXT("Strength"), GetForwardForce() / MaxForce);
+	
 }
 
 APlayerController* ABasePawn::GetPlayerController()
