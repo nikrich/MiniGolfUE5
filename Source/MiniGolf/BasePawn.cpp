@@ -96,8 +96,16 @@ FVector ABasePawn::GetForwardVector() const
 void ABasePawn::StopTurnIfBallStops()
 {
 	if (!PlayerController) return;
+	//UE_LOG(LogTemp, Warning, TEXT("X Speed: %f"), BaseMesh->GetComponentVelocity().X);
 
-	if (BaseMesh->GetComponentVelocity() == FVector::ZeroVector && !CanShoot) {
+	auto XSpeed = FMath::Abs(BaseMesh->GetComponentVelocity().X);
+	auto YSpeed = FMath::Abs(BaseMesh->GetComponentVelocity().X);
+
+	if ((XSpeed < 1.f && XSpeed > 0.5f) &&
+		(YSpeed < 1.f && YSpeed > 0.5f) &&
+		!CanShoot) {
+
+		BaseMesh->SetPhysicsLinearVelocity(FVector::Zero(), false);
 		CanShoot = true;
 
 		UE_LOG(LogTemp, Warning, TEXT("Turn ended"));
@@ -106,7 +114,7 @@ void ABasePawn::StopTurnIfBallStops()
 			auto Dist = FVector::DistSquaredXY(BaseMesh->GetComponentLocation(), GolfHole->GetActorLocation());
 			UE_LOG(LogTemp, Warning, TEXT("Ball - X: %f, Y: %f, Z: %f"), BaseMesh->GetComponentLocation().X, BaseMesh->GetComponentLocation().Y, BaseMesh->GetComponentLocation().Z);
 			UE_LOG(LogTemp, Warning, TEXT("Hole - X: %f, Y: %f, Z: %f"), GolfHole->GetActorLocation().X, GolfHole->GetActorLocation().Y, GolfHole->GetActorLocation().Z);
-			UE_LOG(LogTemp, Warning, TEXT("Distance from hole: %f"), (float) Dist);
+			UE_LOG(LogTemp, Warning, TEXT("Distance from hole: %f m"), (float) Dist / 10000);
 		}
 	}
 }
