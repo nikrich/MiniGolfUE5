@@ -143,17 +143,12 @@ void ABasePawn::UpdateArrow()
 
 	FRotator LookAtRotation = FRotator(0.f, 180 + GetForwardVector().Rotation().Yaw, 0.f);
 	ArrowLengthSpringArm->SetWorldRotation(FMath::RInterpTo(ArrowLengthSpringArm->GetComponentRotation(), LookAtRotation, UGameplayStatics::GetWorldDeltaSeconds(this), 20.f));
-	ArrowLengthSpringArm->TargetArmLength = GetForwardForce();
+	ArrowLengthSpringArm->TargetArmLength = GetForwardForce();	
 
-	// Adjust Size
 	FVector BodyScale = ArrowBodyMesh->GetRelativeScale3D();
-	BodyScale.X = GetForwardForce() / 100;
-	ArrowBodyMesh->SetRelativeScale3D(BodyScale);
-
-	// TODO: Adjust Color
-	UE_LOG(LogTemp, Warning, TEXT("Strength: %f"), GetForwardForce() / MaxForce);
-	ArrowMaterial->SetScalarParameterValue(TEXT("Strength"), GetForwardForce() / MaxForce);
-	
+	BodyScale.X = GetForwardForce() / 105;
+	ArrowBodyMesh->SetRelativeScale3D(BodyScale);	
+	ArrowMaterial->SetScalarParameterValue(TEXT("Strength"), GetForwardForce() / MaxForce);	
 }
 
 APlayerController* ABasePawn::GetPlayerController()
