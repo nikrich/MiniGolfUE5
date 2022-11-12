@@ -7,6 +7,8 @@
 #include "DrawDebugHelpers.h"
 #include "Kismet/GameplayStatics.h"
 #include "GolfPlayerController.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "DirectionHelper.h"
 
 // Sets default values
 ABasePawn::ABasePawn()
@@ -16,6 +18,15 @@ ABasePawn::ABasePawn()
 
 	BaseMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Base Mesh"));
 	RootComponent = BaseMesh;
+
+	ArrowLengthSpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Arrow Length Spring Arm"));
+	ArrowLengthSpringArm->SetupAttachment(BaseMesh);
+
+	ArrowHeadMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Arrow Head Mesh"));
+	ArrowHeadMesh->SetupAttachment(ArrowLengthSpringArm);
+
+	ArrowBodyMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Arrow Body Mesh"));
+	ArrowBodyMesh->SetupAttachment(ArrowLengthSpringArm);
 }
 
 // Called when the game starts or when spawned
@@ -59,6 +70,20 @@ void ABasePawn::Tick(float DeltaTime)
 	DrawDebugLine(GetWorld(), GetActorLocation(), GetMouseCollision(), FColor::Red, false);
 
 	StopTurnIfBallStops();
+
+	// Arrow
+
+	if (!PlayerController->GetPlayerEnabledState()) {
+		ArrowLengthSpringArm->SetVisibility(false, true);
+	}
+	else {
+		ArrowLengthSpringArm->SetVisibility(true, true);
+	}
+	
+	float Angle = DirectionHelper::GetQuadrantAngle(GetForwardVector());	
+	FRotator LookAtRotation = FRotator(0.f, 180 + GetForwardVector().Rotation().Yaw, 0.f);
+	ArrowLengthSpringArm->SetWorldRotation(FMath::RInterpTo(ArrowLengthSpringArm->GetComponentRotation(), LookAtRotation, UGameplayStatics::GetWorldDeltaSeconds(this), 20.f));
+	ArrowLengthSpringArm->TargetArmLength = GetForwardForce();
 }
 
 // Called to bind functionality to input
@@ -70,8 +95,7 @@ void ABasePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 }
 
 FVector ABasePawn::GetForwardVector() const
-{
-	DrawDebugSphere(GetWorld(), GetMouseCollision(), 25.f, 20, FColor::Red, false);
+{	
 	FVector DisplacementVector = (GetMouseCollision() - GetActorLocation()) / GetDistance();
 	DisplacementVector.Z = 0; // Do not allow ball to go into the air
 
