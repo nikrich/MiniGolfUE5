@@ -70,24 +70,7 @@ void ABasePawn::Tick(float DeltaTime)
 	//DrawDebugLine(GetWorld(), GetActorLocation(), GetMouseCollision(), FColor::Red, false);
 
 	StopTurnIfBallStops();
-
-	// Arrow
-
-	if (!PlayerController->GetPlayerEnabledState()) {
-		ArrowLengthSpringArm->SetVisibility(false, true);
-	}
-	else {
-		ArrowLengthSpringArm->SetVisibility(true, true);
-	}
-	
-	float Angle = DirectionHelper::GetQuadrantAngle(GetForwardVector());	
-	FRotator LookAtRotation = FRotator(0.f, 180 + GetForwardVector().Rotation().Yaw, 0.f);
-	ArrowLengthSpringArm->SetWorldRotation(FMath::RInterpTo(ArrowLengthSpringArm->GetComponentRotation(), LookAtRotation, UGameplayStatics::GetWorldDeltaSeconds(this), 20.f));
-	ArrowLengthSpringArm->TargetArmLength = GetForwardForce();
-
-	FVector BodyScale = ArrowBodyMesh->GetRelativeScale3D();
-	BodyScale.X = GetForwardForce() / 100;
-	ArrowBodyMesh->SetRelativeScale3D(BodyScale);
+	UpdateArrow();
 }
 
 // Called to bind functionality to input
@@ -140,6 +123,25 @@ FVector ABasePawn::GetMouseCollision() const
 	bool MouseHitResult = PlayerController->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, HitResult);
 		
 	return HitResult.ImpactPoint;
+}
+
+void ABasePawn::UpdateArrow()
+{
+	if (!PlayerController->GetPlayerEnabledState()) {
+		ArrowLengthSpringArm->SetVisibility(false, true);
+	}
+	else {
+		ArrowLengthSpringArm->SetVisibility(true, true);
+	}
+
+	float Angle = DirectionHelper::GetQuadrantAngle(GetForwardVector());
+	FRotator LookAtRotation = FRotator(0.f, 180 + GetForwardVector().Rotation().Yaw, 0.f);
+	ArrowLengthSpringArm->SetWorldRotation(FMath::RInterpTo(ArrowLengthSpringArm->GetComponentRotation(), LookAtRotation, UGameplayStatics::GetWorldDeltaSeconds(this), 20.f));
+	ArrowLengthSpringArm->TargetArmLength = GetForwardForce();
+
+	FVector BodyScale = ArrowBodyMesh->GetRelativeScale3D();
+	BodyScale.X = GetForwardForce() / 100;
+	ArrowBodyMesh->SetRelativeScale3D(BodyScale);
 }
 
 APlayerController* ABasePawn::GetPlayerController()

@@ -60,6 +60,7 @@ private:
 	void StopTurnIfBallStops();
 	float GetDistance() const;
 	FVector GetMouseCollision() const;	
+	void UpdateArrow();
 
 	UFUNCTION(Blueprintcallable)
 	float GetForwardForce() const;
