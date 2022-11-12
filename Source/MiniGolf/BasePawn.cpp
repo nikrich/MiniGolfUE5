@@ -49,9 +49,10 @@ void ABasePawn::Shoot()
 {
 	if (!PlayerController) return;
 
-	if (!PlayerController->GetPlayerEnabledState())
+	if (!CanShoot)
 		return;
 
+	CanShoot = false;
 	PlayerController->Shoot();
 
 	BaseMesh->AddImpulse(GetForwardVector() * SpeedMultiplier * GetForwardForce(), TEXT("None"), false);
@@ -98,8 +99,8 @@ FVector ABasePawn::GetForwardVector() const
 
 void ABasePawn::StopTurnIfBallStops()
 {
-	if (BaseMesh->GetComponentVelocity() == FVector::ZeroVector && PlayerController && !PlayerController->GetPlayerEnabledState()) {
-		PlayerController->SetPlayerEnabledState(true);
+	if (BaseMesh->GetComponentVelocity() == FVector::ZeroVector && PlayerController && !CanShoot) {
+		CanShoot = true;
 
 		UE_LOG(LogTemp, Warning, TEXT("Turn ended"));
 
@@ -134,11 +135,11 @@ FVector ABasePawn::GetMouseCollision() const
 
 void ABasePawn::UpdateArrow()
 {
-	if (!PlayerController->GetPlayerEnabledState()) {
-		ArrowLengthSpringArm->SetVisibility(false, true);
+	if (CanShoot) {
+		ArrowLengthSpringArm->SetVisibility(true, true);
 	}
 	else {
-		ArrowLengthSpringArm->SetVisibility(true, true);
+		ArrowLengthSpringArm->SetVisibility(false, true);
 	}
 
 	FRotator LookAtRotation = FRotator(0.f, 180 + GetForwardVector().Rotation().Yaw, 0.f);

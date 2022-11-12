@@ -56,6 +56,7 @@ private:
 	AActor* GolfHole;
 	class AGolfPlayerController* PlayerController;
 	class UMaterialInstanceDynamic* ArrowMaterial;
+	bool CanShoot = true;
 
 	
 	FVector GetForwardVector() const;
