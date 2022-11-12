@@ -40,6 +40,9 @@ void ABasePawn::BeginPlay()
 
 	// Set Arrow Materials
 	UMaterialInterface* Material = ArrowBodyMesh->GetMaterial(0);
+
+	if (!Material) return;
+
 	ArrowMaterial = UMaterialInstanceDynamic::Create(Material, NULL);
 	ArrowBodyMesh->SetMaterial(0, ArrowMaterial);
 	ArrowHeadMesh->SetMaterial(0, ArrowMaterial);
@@ -70,13 +73,7 @@ void ABasePawn::Shoot()
 void ABasePawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	//DrawDebugSphere(GetWorld(), GetMouseCollision(), 5.f, 20.f, FColor::Red, false);
-
 	auto Force = FMath::Clamp(GetDistance(), 0.f, MaxForce);
-
-	//DrawDebugLine(GetWorld(), GetActorLocation(), GetMouseCollision(), FColor::Red, false);
-
 	StopTurnIfBallStops();
 	UpdateArrow();
 }
@@ -99,7 +96,9 @@ FVector ABasePawn::GetForwardVector() const
 
 void ABasePawn::StopTurnIfBallStops()
 {
-	if (BaseMesh->GetComponentVelocity() == FVector::ZeroVector && PlayerController && !CanShoot) {
+	if (!PlayerController) return;
+
+	if (BaseMesh->GetComponentVelocity() == FVector::ZeroVector && !CanShoot) {
 		CanShoot = true;
 
 		UE_LOG(LogTemp, Warning, TEXT("Turn ended"));
