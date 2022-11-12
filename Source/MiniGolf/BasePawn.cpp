@@ -106,6 +106,8 @@ float ABasePawn::GetDistance() const
 
 FVector ABasePawn::GetMouseCollision() const
 {
+	if (!PlayerController) return FVector::ZeroVector;
+
 	FHitResult HitResult;
 	bool MouseHitResult = PlayerController->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, HitResult);
 		
