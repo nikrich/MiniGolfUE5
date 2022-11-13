@@ -57,7 +57,9 @@ void ABasePawn::Shoot()
 	CanShoot = false;
 	PlayerController->Shoot();
 
-	BaseMesh->AddImpulse(GetForwardVector() * SpeedMultiplier * GetForwardForce(), TEXT("None"), false);
+
+	UE_LOG(LogTemp, Warning, TEXT("Delta: %f"), UGameplayStatics::GetWorldDeltaSeconds(this));
+	BaseMesh->AddImpulse(GetForwardVector() * SpeedMultiplier * GetForwardForce() * UGameplayStatics::GetWorldDeltaSeconds(this), TEXT("None"), false);
 
 	if (ShotCameraShake && PlayerController) {
 		PlayerController->ClientStartCameraShake(ShotCameraShake);
@@ -86,7 +88,7 @@ void ABasePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 }
 
 FVector ABasePawn::GetForwardVector() const
-{	
+{
 	FVector DisplacementVector = (GetMouseCollision() - GetActorLocation()) / GetDistance();
 	DisplacementVector.Z = 0; // Do not allow ball to go into the air
 
@@ -95,10 +97,10 @@ FVector ABasePawn::GetForwardVector() const
 
 void ABasePawn::StopTurnIfBallStops()
 {
-	if (!PlayerController) 
+	if (!PlayerController)
 		return;
 
-	if (!PlayerController->GetPlayerEnabledState()) 
+	if (!PlayerController->GetPlayerEnabledState())
 		return;
 
 	auto XSpeed = FMath::Abs(BaseMesh->GetComponentVelocity().X);
@@ -115,7 +117,7 @@ void ABasePawn::StopTurnIfBallStops()
 
 		if (GolfHole) {
 			auto Dist = FVector::DistSquaredXY(BaseMesh->GetComponentLocation(), GolfHole->GetActorLocation());
-			UE_LOG(LogTemp, Warning, TEXT("Distance from hole: %f m"), (float) Dist / 10000);
+			UE_LOG(LogTemp, Warning, TEXT("Distance from hole: %f m"), (float)Dist / 10000);
 		}
 	}
 }
@@ -136,7 +138,7 @@ FVector ABasePawn::GetMouseCollision() const
 
 	FHitResult HitResult;
 	bool MouseHitResult = PlayerController->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, HitResult);
-		
+
 	return HitResult.ImpactPoint;
 }
 
@@ -151,12 +153,12 @@ void ABasePawn::UpdateArrow()
 
 	FRotator LookAtRotation = FRotator(0.f, 180 + GetForwardVector().Rotation().Yaw, 0.f);
 	ArrowLengthSpringArm->SetWorldRotation(FMath::RInterpTo(ArrowLengthSpringArm->GetComponentRotation(), LookAtRotation, UGameplayStatics::GetWorldDeltaSeconds(this), 20.f));
-	ArrowLengthSpringArm->TargetArmLength = GetForwardForce();	
+	ArrowLengthSpringArm->TargetArmLength = GetForwardForce();
 
 	FVector BodyScale = ArrowBodyMesh->GetRelativeScale3D();
 	BodyScale.X = GetForwardForce() / 105;
-	ArrowBodyMesh->SetRelativeScale3D(BodyScale);	
-	ArrowMaterial->SetScalarParameterValue(TEXT("Strength"), GetForwardForce() / MaxForce);	
+	ArrowBodyMesh->SetRelativeScale3D(BodyScale);
+	ArrowMaterial->SetScalarParameterValue(TEXT("Strength"), GetForwardForce() / MaxForce);
 }
 
 APlayerController* ABasePawn::GetPlayerController()
