@@ -22,5 +22,7 @@ public:
 	void SetPlayerEnabledState(bool bPlayerEnabled);
 	bool GetPlayerEnabledState();
 	void Shoot();
+
+	UFUNCTION(BlueprintCallable)
 	int32 GetShotsTaken();
 };

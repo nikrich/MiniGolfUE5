@@ -19,3 +19,8 @@ void AGolfGameMode::HandleGameStart()
 		GolfPlayerController->SetPlayerEnabledState(true);
 	}
 }
+
+AGolfPlayerController* AGolfGameMode::GetGolfPlayerController() const
+{
+	return GolfPlayerController;
+}

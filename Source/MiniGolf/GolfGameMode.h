@@ -25,4 +25,7 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 		void RoundComplete(int32 ShotsTaken);
 
+	UFUNCTION(BlueprintCallable)
+		AGolfPlayerController* GetGolfPlayerController() const;
+
 };
