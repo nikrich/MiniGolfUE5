@@ -9,6 +9,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Materials/MaterialInstanceDynamic.h"
 #include "Materials/MaterialInterface.h"
+#include "Camera/CameraComponent.h"
 
 // Sets default values
 ABasePawn::ABasePawn()
@@ -99,7 +100,21 @@ FVector ABasePawn::GetForwardVector() const
 		return GetOwner()->GetActorForwardVector();
 
 	if (PlayerController->GetIsController()) {
-		return FVector(GetDistance(), 0.f, 0.f);
+		// TODO: Use DI ISO this boknai
+		FMinimalViewInfo CameraViewInfo;
+		UCameraComponent* CameraComponent = Cast<UCameraComponent>(GetComponentByClass(UCameraComponent::StaticClass()));
+		CameraComponent->GetCameraView(1.0f, CameraViewInfo);
+
+		if (!CameraComponent)
+			return FVector(0.f, 0.f, 0.f);
+
+		//return CameraViewInfo.Rotation.GetVe;
+		UE_LOG(LogTemp, Warning, TEXT("Camera Rotation: %f"), CameraViewInfo.Rotation.Yaw);
+
+		auto ForwardVector = CameraViewInfo.Rotation.Vector();
+		ForwardVector.Z = 0; // Do not allow ball to go into the air
+
+		return ForwardVector;
 	}
 
 	FVector DisplacementVector = (GetMouseCollision() - GetActorLocation()) / GetDistance();
