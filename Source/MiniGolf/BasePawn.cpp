@@ -59,7 +59,7 @@ void ABasePawn::Shoot()
 
 
 	UE_LOG(LogTemp, Warning, TEXT("Delta: %f"), UGameplayStatics::GetWorldDeltaSeconds(this));
-	BaseMesh->AddImpulse(GetForwardVector() * SpeedMultiplier * GetForwardForce() * UGameplayStatics::GetWorldDeltaSeconds(this), TEXT("None"), false);
+	BaseMesh->AddImpulse(GetForwardVector() * SpeedMultiplier * GetForwardForce(), TEXT("None"), false);
 
 	if (ShotCameraShake && PlayerController) {
 		PlayerController->ClientStartCameraShake(ShotCameraShake);
