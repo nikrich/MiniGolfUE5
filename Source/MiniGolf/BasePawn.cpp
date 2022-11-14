@@ -70,6 +70,11 @@ void ABasePawn::Shoot()
 	}
 }
 
+void ABasePawn::Power(float fValue)
+{
+	PowerValue = fValue;
+}
+
 // Called every frame
 void ABasePawn::Tick(float DeltaTime)
 {
@@ -85,10 +90,18 @@ void ABasePawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	PlayerInputComponent->BindAction(TEXT("Shoot"), IE_Pressed, this, &ABasePawn::Shoot);
+	PlayerInputComponent->BindAxis(TEXT("Power"), this, &ABasePawn::Power);
 }
 
 FVector ABasePawn::GetForwardVector() const
 {
+	if (!PlayerController)
+		return GetOwner()->GetActorForwardVector();
+
+	if (PlayerController->GetIsController()) {
+		return FVector(GetDistance(), 0.f, 0.f);
+	}
+
 	FVector DisplacementVector = (GetMouseCollision() - GetActorLocation()) / GetDistance();
 	DisplacementVector.Z = 0; // Do not allow ball to go into the air
 
@@ -129,6 +142,16 @@ float ABasePawn::GetForwardForce() const
 
 float ABasePawn::GetDistance() const
 {
+	if (!PlayerController)
+		return 0.f;
+
+	if (PlayerController->GetIsController()) {
+		UE_LOG(LogTemp, Warning, TEXT("Power Value: %f"), PowerValue);
+		return FMath::Abs(MaxForce * PowerValue);
+	}	
+
+	UE_LOG(LogTemp, Warning, TEXT("Power Value: %f"), FVector::Dist(GetActorLocation(), GetMouseCollision()));
+
 	return FVector::Dist(GetActorLocation(), GetMouseCollision());
 }
 
@@ -151,6 +174,12 @@ void ABasePawn::UpdateArrow()
 		ArrowLengthSpringArm->SetVisibility(false, true);
 	}
 
+	if (GetDistance() == 0) {
+		ArrowLengthSpringArm->SetVisibility(false, true);
+		return;
+	}
+
+	ArrowLengthSpringArm->SetVisibility(false);
 	FRotator LookAtRotation = FRotator(0.f, 180 + GetForwardVector().Rotation().Yaw, 0.f);
 	ArrowLengthSpringArm->SetWorldRotation(FMath::RInterpTo(ArrowLengthSpringArm->GetComponentRotation(), LookAtRotation, UGameplayStatics::GetWorldDeltaSeconds(this), 20.f));
 	ArrowLengthSpringArm->TargetArmLength = GetForwardForce();
@@ -161,7 +190,7 @@ void ABasePawn::UpdateArrow()
 	ArrowMaterial->SetScalarParameterValue(TEXT("Strength"), GetForwardForce() / MaxForce);
 }
 
-APlayerController* ABasePawn::GetPlayerController()
+AGolfPlayerController* ABasePawn::GetGolfPlayerController() const
 {
 	return PlayerController;
 }

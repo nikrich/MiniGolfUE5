@@ -23,6 +23,14 @@ public:
 	bool GetPlayerEnabledState();
 	void Shoot();
 
+	bool IsController = true;
+
 	UFUNCTION(BlueprintCallable)
-	int32 GetShotsTaken();
+		int32 GetShotsTaken();
+
+	UFUNCTION(BlueprintCallable)
+		bool GetIsController() const;
+
+	UFUNCTION(BlueprintCallable)
+		void SetIsController(bool bIsController);
 };

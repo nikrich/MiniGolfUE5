@@ -31,3 +31,13 @@ int32 AGolfPlayerController::GetShotsTaken()
 {
 	return ShotsTaken;
 }
+
+bool AGolfPlayerController::GetIsController() const
+{
+	return IsController;
+}
+
+void AGolfPlayerController::SetIsController(bool bIsController)
+{
+	IsController = bIsController;
+}

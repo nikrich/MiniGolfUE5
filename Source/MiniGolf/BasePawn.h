@@ -20,6 +20,7 @@ protected:
 	virtual void BeginPlay() override;
 		
 	void Shoot();
+	void Power(float fValue);
 
 public:	
 	// Called every frame
@@ -57,6 +58,7 @@ private:
 	class AGolfPlayerController* PlayerController;
 	class UMaterialInstanceDynamic* ArrowMaterial;
 	bool CanShoot = true;
+	float PowerValue = 0.f;
 
 	
 	FVector GetForwardVector() const;
@@ -69,5 +71,6 @@ private:
 	float GetForwardForce() const;
 
 public:
-	APlayerController* GetPlayerController();
+	UFUNCTION(Blueprintcallable)
+		AGolfPlayerController* GetGolfPlayerController() const;
 };
