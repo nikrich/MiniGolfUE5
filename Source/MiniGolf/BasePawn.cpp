@@ -217,5 +217,45 @@ void ABasePawn::AddColor(FString Color)
 	for (int i = 0; i < Colors.Num(); i++) {
 		UE_LOG(LogTemp, Warning, TEXT("Color: %s"), *Colors[i]);
 	}
+
+	UpdateBallMaterialByColor();
+}
+
+void ABasePawn::UpdateBallMaterialByColor()
+{
+	if (Colors.Contains("blue") && Colors.Contains("red") && Colors.Contains("yellow")) {
+		BaseMesh->SetMaterial(0, Materials[6]);
+		return;
+	}
+
+	if (Colors.Contains("red") && Colors.Contains("yellow")) {
+		BaseMesh->SetMaterial(0, Materials[5]);
+		return;
+	}
+
+	if (Colors.Contains("blue") && Colors.Contains("yellow")) {
+		BaseMesh->SetMaterial(0, Materials[4]);
+		return;
+	}
+
+	if (Colors.Contains("blue") && Colors.Contains("red")) {
+		BaseMesh->SetMaterial(0, Materials[3]);
+		return;
+	}
+
+	if (Colors.Contains("red")) {
+		BaseMesh->SetMaterial(0, Materials[2]);
+		return;
+	}
+
+	if (Colors.Contains("yellow")) {
+		BaseMesh->SetMaterial(0, Materials[1]);
+		return;
+	}
+
+	if (Colors.Contains("blue")) {
+		BaseMesh->SetMaterial(0, Materials[0]);
+		return;
+	}
 }
 

@@ -35,14 +35,8 @@ void ABaseBox::OnGolfBallEnter(UPrimitiveComponent* OverlappedComponent, AActor*
 {
 	if (!OtherComponent->ComponentHasTag("Ball"))
 		return;
-
-	auto Material = BoxMesh->GetMaterial(0);	
+	
 	BoxMesh->GetOwner()->Destroy();
-
-	if (!Material)
-		return;
-
-	OtherComponent->SetMaterial(0, Material);
 
 	if (ShotCameraShake)
 		GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(ShotCameraShake);

@@ -53,6 +53,9 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Movement")
 		USoundBase* HitSound;
+
+	UPROPERTY(EditAnywhere, Category = "Attributes")
+		TArray<UMaterial*> Materials;
 	
 	AActor* GolfHole;
 	class AGolfPlayerController* PlayerController;
@@ -70,6 +73,7 @@ private:
 
 	UFUNCTION(Blueprintcallable)
 	float GetForwardForce() const;
+	void UpdateBallMaterialByColor();
 
 public:
 	UFUNCTION(Blueprintcallable)
