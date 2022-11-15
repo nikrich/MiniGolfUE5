@@ -109,7 +109,7 @@ FVector ABasePawn::GetForwardVector() const
 			return FVector(0.f, 0.f, 0.f);
 
 		//return CameraViewInfo.Rotation.GetVe;
-		UE_LOG(LogTemp, Warning, TEXT("Camera Rotation: %f"), CameraViewInfo.Rotation.Yaw);
+		//UE_LOG(LogTemp, Warning, TEXT("Camera Rotation: %f"), CameraViewInfo.Rotation.Yaw);
 
 		auto ForwardVector = CameraViewInfo.Rotation.Vector();
 		ForwardVector.Z = 0; // Do not allow ball to go into the air
@@ -161,11 +161,11 @@ float ABasePawn::GetDistance() const
 		return 0.f;
 
 	if (PlayerController->GetIsController()) {
-		UE_LOG(LogTemp, Warning, TEXT("Power Value: %f"), PowerValue);
+		//UE_LOG(LogTemp, Warning, TEXT("Power Value: %f"), PowerValue);
 		return FMath::Abs(MaxForce * PowerValue);
 	}	
 
-	UE_LOG(LogTemp, Warning, TEXT("Power Value: %f"), FVector::Dist(GetActorLocation(), GetMouseCollision()));
+	//UE_LOG(LogTemp, Warning, TEXT("Power Value: %f"), FVector::Dist(GetActorLocation(), GetMouseCollision()));
 
 	return FVector::Dist(GetActorLocation(), GetMouseCollision());
 }
