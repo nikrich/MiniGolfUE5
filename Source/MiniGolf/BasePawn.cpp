@@ -210,3 +210,12 @@ AGolfPlayerController* ABasePawn::GetGolfPlayerController() const
 	return PlayerController;
 }
 
+void ABasePawn::AddColor(FString Color)
+{
+	Colors.Add(Color);
+
+	for (int i = 0; i < Colors.Num(); i++) {
+		UE_LOG(LogTemp, Warning, TEXT("Color: %s"), *Colors[i]);
+	}
+}
+

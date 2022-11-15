@@ -59,13 +59,14 @@ private:
 	class UMaterialInstanceDynamic* ArrowMaterial;
 	bool CanShoot = true;
 	float PowerValue = 0.f;
-
-	
 	FVector GetForwardVector() const;
 	void StopTurnIfBallStops();
 	float GetDistance() const;
-	FVector GetMouseCollision() const;	
+	FVector GetMouseCollision() const;
 	void UpdateArrow();
+
+	// Box Attributes
+	TArray<FString> Colors = TArray<FString>();
 
 	UFUNCTION(Blueprintcallable)
 	float GetForwardForce() const;
@@ -73,4 +74,6 @@ private:
 public:
 	UFUNCTION(Blueprintcallable)
 		AGolfPlayerController* GetGolfPlayerController() const;
+
+	void AddColor(FString Color);
 };

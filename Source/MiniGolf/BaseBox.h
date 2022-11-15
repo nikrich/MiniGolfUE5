@@ -13,7 +13,7 @@ class MINIGOLF_API ABaseBox : public AActor
 	
 public:	
 	// Sets default values for this actor's properties
-	ABaseBox();
+	ABaseBox();	
 
 protected:
 	// Called when the game starts or when spawned
@@ -32,6 +32,9 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Components")
 		TSubclassOf<class UCameraShakeBase> ShotCameraShake;
+
+	UPROPERTY(EditAnywhere, Category = "Attributes")
+		FString Color;
 
 	UFUNCTION()
 		void OnGolfBallEnter(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit);

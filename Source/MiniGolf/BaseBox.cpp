@@ -3,6 +3,7 @@
 
 #include "BaseBox.h"
 #include "Components/BoxComponent.h"
+#include "BasePawn.h"
 
 // Sets default values
 ABaseBox::ABaseBox()
@@ -38,11 +39,18 @@ void ABaseBox::OnGolfBallEnter(UPrimitiveComponent* OverlappedComponent, AActor*
 	auto Material = BoxMesh->GetMaterial(0);	
 	BoxMesh->GetOwner()->Destroy();
 
+	if (!Material)
+		return;
+
 	OtherComponent->SetMaterial(0, Material);
 
-	if (ShotCameraShake) {
+	if (ShotCameraShake)
 		GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(ShotCameraShake);
-	}
 
+	ABasePawn* GolfBall = Cast<ABasePawn>(OtherActor);
 
+	if (!GolfBall)
+		return;
+
+	GolfBall->AddColor(Color);
 }
