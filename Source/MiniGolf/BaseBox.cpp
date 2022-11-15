@@ -4,6 +4,7 @@
 #include "BaseBox.h"
 #include "Components/BoxComponent.h"
 #include "BasePawn.h"
+#include <Kismet/GameplayStatics.h>
 
 // Sets default values
 ABaseBox::ABaseBox()
@@ -33,6 +34,10 @@ void ABaseBox::Tick(float DeltaTime)
 
 void ABaseBox::OnGolfBallEnter(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit)
 {
+	if (BreakSound) {
+		UGameplayStatics::PlaySoundAtLocation(this, BreakSound, GetActorLocation());
+	}
+
 	if (!OtherComponent->ComponentHasTag("Ball"))
 		return;
 	

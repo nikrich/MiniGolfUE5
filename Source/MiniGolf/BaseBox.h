@@ -36,6 +36,10 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Attributes")
 		FString Color;
 
+	UPROPERTY(EditAnywhere, Category = "Movement")
+		USoundBase* BreakSound;
+
 	UFUNCTION()
 		void OnGolfBallEnter(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit);
+
 };

@@ -57,6 +57,7 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Attributes")
 		TArray<UMaterial*> Materials;
 	
+	float CurrentForce = 0.f;
 	AActor* GolfHole;
 	class AGolfPlayerController* PlayerController;
 	class UMaterialInstanceDynamic* ArrowMaterial;

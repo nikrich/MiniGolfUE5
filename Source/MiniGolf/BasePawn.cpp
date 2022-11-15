@@ -59,7 +59,7 @@ void ABasePawn::Shoot()
 	PlayerController->Shoot();
 
 
-	UE_LOG(LogTemp, Warning, TEXT("Delta: %f"), UGameplayStatics::GetWorldDeltaSeconds(this));
+	UE_LOG(LogTemp, Warning, TEXT("Delta: %f"), UGameplayStatics::GetWorldDeltaSeconds(this));	
 	BaseMesh->AddImpulse(GetForwardVector() * SpeedMultiplier * GetForwardForce(), TEXT("None"), false);
 
 	if (ShotCameraShake && PlayerController) {
@@ -80,7 +80,9 @@ void ABasePawn::Power(float fValue)
 void ABasePawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	auto Force = FMath::Clamp(GetDistance(), 0.f, MaxForce);
+	
+	CurrentForce = GetForwardForce();
+
 	StopTurnIfBallStops();
 	UpdateArrow();
 }
@@ -161,8 +163,8 @@ float ABasePawn::GetDistance() const
 		return 0.f;
 
 	if (PlayerController->GetIsController()) {
-		//UE_LOG(LogTemp, Warning, TEXT("Power Value: %f"), PowerValue);
-		return FMath::Abs(MaxForce * PowerValue);
+		//UE_LOG(LogTemp, Warning, TEXT("Power Value: %f"), PowerValue);		;
+		return CurrentForce + PowerValue * 10;
 	}	
 
 	//UE_LOG(LogTemp, Warning, TEXT("Power Value: %f"), FVector::Dist(GetActorLocation(), GetMouseCollision()));
