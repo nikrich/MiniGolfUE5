@@ -230,6 +230,9 @@ TArray<FString> ABasePawn::GetColors()
 
 void ABasePawn::UpdateBallMaterialByColor()
 {
+	if (Materials.Num() < 7)
+		return;
+
 	if (Colors.Contains("blue") && Colors.Contains("red") && Colors.Contains("yellow")) {
 		BaseMesh->SetMaterial(0, Materials[6]);
 		return;
