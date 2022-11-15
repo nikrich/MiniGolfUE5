@@ -221,6 +221,11 @@ void ABasePawn::AddColor(FString Color)
 	UpdateBallMaterialByColor();
 }
 
+TArray<FString> ABasePawn::GetColors()
+{
+	return Colors;
+}
+
 void ABasePawn::UpdateBallMaterialByColor()
 {
 	if (Colors.Contains("blue") && Colors.Contains("red") && Colors.Contains("yellow")) {

@@ -43,10 +43,23 @@ void AGolfHole::EndRound(ABasePawn* GolfBall)
 
 	if (!GolfGameMode) return;
 
-	GolfGameMode->RoundComplete(PlayerController->GetShotsTaken());
+	GolfGameMode->RoundComplete(PlayerController->GetShotsTaken(), DidWin(GolfBall));
 	IsActive = false;
 
 	if (!PlayerController) return;
+}
+
+bool AGolfHole::DidWin(ABasePawn* GolfBall)
+{
+	auto GolfBallColors = GolfBall->GetColors();
+
+	for (int i = 0; i < BallWinColors.Num(); i++)
+	{
+		if (!GolfBallColors.Contains(BallWinColors[i]))
+			return false;
+	}
+
+	return true;
 }
 
 void AGolfHole::OnGolfBallEnter(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)

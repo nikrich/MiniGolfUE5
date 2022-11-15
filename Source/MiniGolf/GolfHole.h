@@ -27,11 +27,15 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowPrivateAccess = "true"))
 		class UBoxComponent* BaseCollider;
 
-	class AGolfGameMode* GolfGameMode;
-	bool IsActive = true;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attributes", meta = (AllowPrivateAccess = "true"))
+		TArray<FString> BallWinColors;
+
+	class AGolfGameMode* GolfGameMode;	
 	class AGolfPlayerController* PlayerController;
+	bool IsActive = true;
 
 	void EndRound(class ABasePawn* GolfBall);
+	bool DidWin(class ABasePawn* GolfBall);
 
 	UFUNCTION()
 		void OnGolfBallEnter(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);

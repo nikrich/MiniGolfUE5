@@ -80,4 +80,5 @@ public:
 		AGolfPlayerController* GetGolfPlayerController() const;
 
 	void AddColor(FString Color);
+	TArray<FString> GetColors();
 };

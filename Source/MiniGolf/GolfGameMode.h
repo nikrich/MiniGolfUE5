@@ -23,7 +23,7 @@ private:
 
 public:
 	UFUNCTION(BlueprintImplementableEvent)
-		void RoundComplete(int32 ShotsTaken);
+		void RoundComplete(int32 ShotsTaken, bool DidWin);
 
 	UFUNCTION(BlueprintCallable)
 		AGolfPlayerController* GetGolfPlayerController() const;
