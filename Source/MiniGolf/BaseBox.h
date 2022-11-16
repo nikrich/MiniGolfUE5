@@ -27,9 +27,6 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowPrivateAccess = "true"))
 		class UBoxComponent* BaseCollider;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowPrivateAccess = "true"))
-		UStaticMeshComponent* BoxMesh;
-
 	UPROPERTY(EditAnywhere, Category = "Components")
 		TSubclassOf<class UCameraShakeBase> ShotCameraShake;
 
@@ -38,6 +35,10 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Movement")
 		USoundBase* BreakSound;
+
+	FTimerHandle DestroyTimerHandle;
+
+	void DestroyActor();
 
 	UFUNCTION()
 		void OnGolfBallEnter(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit);

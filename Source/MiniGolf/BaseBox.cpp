@@ -14,9 +14,6 @@ ABaseBox::ABaseBox()
 
 	BaseCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("Base Collider"));
 	RootComponent = BaseCollider;
-
-	BoxMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Box Mesh"));
-	BoxMesh->SetupAttachment(BaseCollider);
 }
 
 // Called when the game starts or when spawned
@@ -32,6 +29,11 @@ void ABaseBox::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
+void ABaseBox::DestroyActor()
+{
+	Destroy();
+}
+
 void ABaseBox::OnGolfBallEnter(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& Hit)
 {
 	if (BreakSound) {
@@ -41,7 +43,9 @@ void ABaseBox::OnGolfBallEnter(UPrimitiveComponent* OverlappedComponent, AActor*
 	if (!OtherComponent->ComponentHasTag("Ball"))
 		return;
 	
-	BoxMesh->GetOwner()->Destroy();
+	GetWorldTimerManager().SetTimer(DestroyTimerHandle, this, &ABaseBox::DestroyActor, 4.f, true);
+
+	
 
 	if (ShotCameraShake)
 		GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(ShotCameraShake);
