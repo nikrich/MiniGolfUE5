@@ -4,7 +4,6 @@
 #include "GolfGameMode.h"
 #include <Kismet/GameplayStatics.h>
 #include "GolfPlayerController.h"
-#include ""
 
 void AGolfGameMode::BeginPlay()
 {
