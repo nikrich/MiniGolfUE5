@@ -43,9 +43,9 @@ void ABaseBox::OnGolfBallEnter(UPrimitiveComponent* OverlappedComponent, AActor*
 	if (!OtherComponent->ComponentHasTag("Ball"))
 		return;
 	
-	GetWorldTimerManager().SetTimer(DestroyTimerHandle, this, &ABaseBox::DestroyActor, 4.f, true);
-
-	
+	// TODO - fix delay
+	//GetWorldTimerManager().SetTimer(DestroyTimerHandle, this, &ABaseBox::DestroyActor, 4.f, true);
+	DestroyActor();	
 
 	if (ShotCameraShake)
 		GetWorld()->GetFirstPlayerController()->ClientStartCameraShake(ShotCameraShake);

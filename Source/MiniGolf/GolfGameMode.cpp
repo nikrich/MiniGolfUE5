@@ -15,9 +15,9 @@ void AGolfGameMode::HandleGameStart()
 {
 	GolfPlayerController = Cast<AGolfPlayerController>(UGameplayStatics::GetPlayerController(this, 0));
 
-	if (GolfPlayerController) {
+	if (GolfPlayerController)
 		GolfPlayerController->SetPlayerEnabledState(true);
-	}
+
 }
 
 AGolfPlayerController* AGolfGameMode::GetGolfPlayerController() const
